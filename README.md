@@ -67,15 +67,24 @@ Before running this application, make sure you have:
    CREATE DATABASE financial_tracker;
    ```
 
-4. **Configure database connection**
+4. **Configure environment variables**
    
-   Update the database configuration in `config/db.go`:
-   ```go
-   host := "localhost"
-   port := 5432
-   user := "postgres"
-   password := "your_password"
-   database := "financial_tracker"
+   Copy the environment template file:
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Update the values in `.env` file:
+   ```env
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_USER=postgres
+   DB_PASSWORD=your_password
+   DB_NAME=financial_tracker
+   DB_SSL_MODE=disable
+   SERVER_PORT=8080
+   JWT_SECRET=your_jwt_secret_key
+   APP_ENV=development
    ```
 
 5. **Create database tables**
@@ -181,16 +190,29 @@ This project follows a clean architecture pattern with clear separation of conce
 
 ## Environment Variables
 
-For production, consider using environment variables for configuration:
+This application uses environment variables for configuration. See `ENV_VARIABLES.md` for detailed documentation.
 
-```bash
-export DB_HOST=localhost
-export DB_PORT=5432
-export DB_USER=postgres
-export DB_PASSWORD=your_password
-export DB_NAME=financial_tracker
-export SERVER_PORT=8080
-```
+### Quick Setup
+
+1. Copy the template:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit `.env` with your configuration:
+   ```env
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_USER=postgres
+   DB_PASSWORD=your_secure_password
+   DB_NAME=financial_tracker
+   SERVER_PORT=8080
+   JWT_SECRET=your_jwt_secret_key
+   ```
+
+### Production Environment
+
+For production deployment, set environment variables directly in your deployment environment instead of using the `.env` file.
 
 ## Testing
 

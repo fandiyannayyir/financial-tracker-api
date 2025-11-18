@@ -2,8 +2,10 @@ package config
 
 import (
 	"database/sql"
+	"financial-tracker-api/utils"
 	"fmt"
 	"log"
+	"strconv"
 
 	_ "github.com/lib/pq"
 )
@@ -11,16 +13,21 @@ import (
 var DB *sql.DB
 
 func ConnectDB() {
-	host := "localhost"
-	port := 5432
-	user := "postgres"
-	password := "1122"
-	database := "financial_tracker"
+	host := utils.GetEnv("DB_HOST", "localhost")
+	portStr := utils.GetEnv("DB_PORT", "5432")
+	user := utils.GetEnv("DB_USER", "postgres")
+	password := utils.GetEnv("DB_PASSWORD", "")
+	database := utils.GetEnv("DB_NAME", "financial_tracker")
+	sslmode := utils.GetEnv("DB_SSL_MODE", "disable")
 
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		host, port, user, password, database)
+	port, err := strconv.Atoi(portStr)
+	if err != nil {
+		log.Fatal("Invalid port number:", err)
+	}
 
-	var err error
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
+		host, port, user, password, database, sslmode)
+
 	DB, err = sql.Open("postgres", psqlInfo)
 	if err != nil {
 		log.Fatal("Error opening database:", err)
