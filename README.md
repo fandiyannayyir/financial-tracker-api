@@ -8,6 +8,9 @@ A RESTful API built with Go and Echo framework for managing personal financial t
 - **RESTful API**: Clean and intuitive API endpoints
 - **Database Integration**: PostgreSQL database with connection pooling
 - **Password Security**: Secure password hashing
+- **Security Middleware**: Comprehensive security headers, CORS, rate limiting
+- **Request Logging**: Detailed request logging with unique request IDs
+- **Request Protection**: Timeout, body limit, and panic recovery
 - **Modular Architecture**: Well-organized code structure with separation of concerns
 
 ## Technology Stack
@@ -24,6 +27,13 @@ A RESTful API built with Go and Echo framework for managing personal financial t
 financial-tracker-api/
 ├── config/
 │   └── db.go              # Database configuration and connection
+├── middleware/
+│   ├── logger.go          # Request logging middleware
+│   ├── middleware.go      # Middleware setup and configuration
+│   ├── rate_limiter.go    # Rate limiting middleware
+│   ├── request.go         # Request handling middleware
+│   ├── security.go        # Security headers and CORS middleware
+│   └── README.md          # Middleware documentation
 ├── modules/
 │   └── users/
 │       ├── user_dto.go    # Data Transfer Objects
@@ -35,6 +45,7 @@ financial-tracker-api/
 ├── routes/
 │   └── route.go           # Main route registration
 ├── utils/
+│   ├── env.go             # Environment variable utilities
 │   └── hash.go            # Password hashing utilities
 ├── main.go                # Application entry point
 ├── go.mod                 # Go module dependencies
@@ -76,15 +87,34 @@ Before running this application, make sure you have:
    
    Update the values in `.env` file:
    ```env
+   # Database Configuration
    DB_HOST=localhost
    DB_PORT=5432
    DB_USER=postgres
    DB_PASSWORD=your_password
    DB_NAME=financial_tracker
    DB_SSL_MODE=disable
+   
+   # Server Configuration
    SERVER_PORT=8080
+   
+   # JWT Configuration
    JWT_SECRET=your_jwt_secret_key
+   
+   # Application Environment
    APP_ENV=development
+   
+   # Security Configuration
+   ALLOWED_ORIGINS=http://localhost:3000,http://localhost:3001
+   CORS_ALLOW_CREDENTIALS=false
+   CORS_MAX_AGE=86400
+   
+   # Rate Limiting
+   RATE_LIMIT_PER_SECOND=20
+   
+   # Request Settings
+   REQUEST_TIMEOUT=30
+   BODY_LIMIT=10M
    ```
 
 5. **Create database tables**
@@ -232,6 +262,20 @@ go test ./...
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Security Features
+
+This API includes comprehensive security middleware:
+
+- **Security Headers**: XSS Protection, Content Type Options, Frame Options, HSTS, CSP
+- **CORS Protection**: Configurable cross-origin resource sharing
+- **Rate Limiting**: Configurable request rate limiting (default: 20 req/sec)
+- **Request Timeout**: Prevents hanging requests (default: 30 seconds)
+- **Body Limit**: Prevents memory exhaustion attacks (default: 10MB)
+- **Request Logging**: Detailed logging with unique request IDs
+- **Panic Recovery**: Graceful handling of runtime panics
+
+For detailed middleware documentation, see `middleware/README.md`.
 
 ## Future Enhancements
 

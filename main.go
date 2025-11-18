@@ -2,6 +2,7 @@ package main
 
 import (
 	"financial-tracker-api/config"
+	"financial-tracker-api/middleware"
 	"financial-tracker-api/routes"
 	"financial-tracker-api/utils"
 	"log"
@@ -22,6 +23,11 @@ func main() {
 
 	// Create a new Echo instance
 	e := echo.New()
+	
+	// Setup middleware
+	middleware.SetupMiddleware(e)
+	
+	// Register routes
 	routes.RegisterRoutes(e)
 
 	// Get server port from environment variables
